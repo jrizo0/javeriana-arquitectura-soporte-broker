@@ -11,7 +11,7 @@ import org.springframework.integration.mqtt.core.MqttPahoClientFactory;
 import org.springframework.integration.mqtt.inbound.MqttPahoMessageDrivenChannelAdapter;
 import org.springframework.integration.mqtt.outbound.MqttPahoMessageHandler;
 import org.springframework.integration.mqtt.support.DefaultPahoMessageConverter;
-import org.springframework.integration.mqtt.support.MqttHeaders;
+// import org.springframework.integration.mqtt.support.MqttHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
 import org.springframework.messaging.MessageHandler;
@@ -19,7 +19,9 @@ import org.springframework.messaging.MessagingException;
 
 @Configuration
 public class MqttBeans {
-	private String topicLocation = "data/locationChanges";
+	// private String topicEvents = "data/events";
+	private String topicLocationChanges = "data/locationChanges";
+	// private String topicIots = "data/iots";
 
 	@Bean
 	public MqttPahoClientFactory mqttClientFactory() {
@@ -44,8 +46,8 @@ public class MqttBeans {
 
 	@Bean
 	public MessageProducer inbound() {
-		MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverIn",
-				mqttClientFactory(), topicLocation);
+		MqttPahoMessageDrivenChannelAdapter adapter = new MqttPahoMessageDrivenChannelAdapter("serverInSoporte",
+				mqttClientFactory(), topicLocationChanges);
 
 		adapter.setCompletionTimeout(5000);
 		adapter.setConverter(new DefaultPahoMessageConverter());
@@ -77,7 +79,7 @@ public class MqttBeans {
 	@ServiceActivator(inputChannel = "mqttOutboundChannel")
 	public MessageHandler mqttOutbound() {
 		// clientId is generated using a random number
-		MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("serverOut", mqttClientFactory());
+		MqttPahoMessageHandler messageHandler = new MqttPahoMessageHandler("serverOutSoporte", mqttClientFactory());
 		messageHandler.setAsync(true);
 		messageHandler.setDefaultTopic("data/#");
 		messageHandler.setDefaultRetained(false);
